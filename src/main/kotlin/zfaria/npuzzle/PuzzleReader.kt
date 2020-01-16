@@ -1,5 +1,6 @@
 package zfaria.npuzzle
 
+import zfaria.npuzzle.heuristics.AtomicScorer
 import java.io.File
 import java.util.*
 
