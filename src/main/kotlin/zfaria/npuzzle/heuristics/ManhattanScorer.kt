@@ -3,18 +3,18 @@ package zfaria.npuzzle.heuristics
 import zfaria.npuzzle.Node
 import kotlin.math.abs
 
-class ManhattanScorer: HeuristicScorer {
-    override fun score(current: Node, ideal: Node): Int {
+class ManhattanScorer(puzzleSize: Int): HeuristicScorer(puzzleSize) {
+
+    override fun score(current: Node): Int {
         var score = 0
-        for (i in current.value) {
+        for (i in current.value.indices) {
             val goalX = ideal.getX(ideal.value.indexOf(i))
             val goalY = ideal.getY(ideal.value.indexOf(i))
 
-            val actualX = current.getX(current.value.indexOf(i))
-            val actualY = current.getY(current.value.indexOf(i))
-
+            val actualX = current.getX(i)
+            val actualY = current.getY(i)
             score += abs(goalX - actualX) + abs(goalY - actualY)
         }
-        return score
+        return score + current.steps
     }
 }
