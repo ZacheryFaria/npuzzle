@@ -1,18 +1,14 @@
 package zfaria.npuzzle
 
-import zfaria.npuzzle.heuristics.HeuristicScorer
 import java.util.*
-import kotlin.system.measureNanoTime
 import kotlin.system.measureTimeMillis
-import kotlin.time.ExperimentalTime
-import kotlin.time.measureTime
 
-fun solve(puzzle: Puzzle, scorer: HeuristicScorer) {
+fun solve(puzzle: Puzzle, scorer: Scorer) {
     var queue = PriorityQueue<Node>(kotlin.Comparator { n1, n2 -> n1.score - n2.score })
     var set = HashSet<Node>()
 
     puzzle.start.scorer = scorer
-    puzzle.start.score = scorer.score(puzzle.start)
+    puzzle.start.score = scorer(puzzle.start)
     queue.add(puzzle.start)
     set.add(puzzle.start)
 

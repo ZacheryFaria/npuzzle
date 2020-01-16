@@ -1,18 +1,17 @@
 package zfaria.npuzzle
 
 import com.google.common.base.Strings
-import com.google.common.hash.*
-import zfaria.npuzzle.heuristics.HeuristicScorer
+import com.google.common.hash.Hashing
 import java.nio.charset.Charset
 
-class Node(val size: Int, var value: List<Int>, var scorer: HeuristicScorer? = null, val parent: Node? = null, var steps: Int = 0) {
+class Node(val size: Int, var value: List<Int>, var scorer: Scorer? = null, val parent: Node? = null, var steps: Int = 0) {
 
     @Suppress("UnstableApiUsage")
     private val hashFunction = Hashing.farmHashFingerprint64()
 
     val zeroIndex = value.indexOf(0)
 
-    var score: Int = scorer?.score(this) ?: 0
+    var score: Int = scorer?.invoke(this) ?: 0
 
     fun getX(n: Int): Int {
         return n % size
@@ -104,10 +103,12 @@ class Node(val size: Int, var value: List<Int>, var scorer: HeuristicScorer? = n
     }
 
     fun printFamily() {
-        if (parent == null)
+        if (parent == null) {
+            println(toBoard())
             return
+        }
         parent.printFamily()
-        println(parent.toBoard())
+        println(toBoard())
         println(Strings.padStart("|", size, ' '))
         println(Strings.padStart("V", size, ' '))
     }

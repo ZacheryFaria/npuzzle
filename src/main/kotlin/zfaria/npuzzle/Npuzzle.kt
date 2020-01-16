@@ -1,9 +1,6 @@
 package zfaria.npuzzle
 
-import zfaria.npuzzle.heuristics.AtomicScorer
-import zfaria.npuzzle.heuristics.ManhattanScorer
-import java.util.*
-import kotlin.system.measureTimeMillis
+import zfaria.npuzzle.heuristics.Manhattan
 
 fun main(args: Array<String>) {
     if (args.isEmpty()) {
@@ -13,8 +10,7 @@ fun main(args: Array<String>) {
 
     var puzzle = getPuzzle(args[0]) ?: return
 
-
-    val scorer = ManhattanScorer(puzzle.size)
+    val scorer = Scorer.AStarScorer(Manhattan(puzzle.size))
 
     solve(puzzle, scorer)
 }
