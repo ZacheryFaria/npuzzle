@@ -21,61 +21,38 @@ class Node(val size: Int, var value: List<Int>, var scorer: Scorer? = null, val 
         return n / size
     }
 
-    fun isValid(): Boolean {
-        val set = setOf(value)
-        return set.size == value.size
-    }
-
     fun expand(): List<Node> {
         return listOf(expandDown(), expandUp(), expandLeft(), expandRight()).filterNotNull()
     }
 
-    fun expandUp(): Node? {
-        if (getY(zeroIndex) <= 0) {
+    fun expandDir(delta: Int, index: (Int) -> Int): Node? {
+        if (index(zeroIndex) <= 0 && delta < 0) {
+            return null
+        } else if (index(zeroIndex) >= size - 1 && delta > 0) {
             return null
         }
         val temp = value[zeroIndex]
         val newVal = value.toMutableList()
 
-        newVal[zeroIndex] = newVal[zeroIndex - size]
-        newVal[zeroIndex - size] = temp
+        newVal[zeroIndex] = newVal[zeroIndex + delta]
+        newVal[zeroIndex + delta] = temp
         return Node(size, newVal, scorer, this, steps + 1)
+    }
+
+    fun expandUp(): Node? {
+        return expandDir(-size, this::getY)
     }
 
     fun expandDown(): Node? {
-        if (getY(zeroIndex) >= size - 1) {
-            return null
-        }
-        val temp = value[zeroIndex]
-        val newVal = value.toMutableList()
-
-        newVal[zeroIndex] = newVal[zeroIndex + size]
-        newVal[zeroIndex + size] = temp
-        return Node(size, newVal, scorer,this, steps + 1)
+        return expandDir(size, this::getY)
     }
 
     fun expandLeft(): Node? {
-        if (getX(zeroIndex) <= 0) {
-            return null
-        }
-        val temp = value[zeroIndex]
-        val newVal = value.toMutableList()
-
-        newVal[zeroIndex] = newVal[zeroIndex - 1]
-        newVal[zeroIndex - 1] = temp
-        return Node(size, newVal, scorer,this, steps + 1)
+        return expandDir(-1, this::getX)
     }
 
     fun expandRight(): Node? {
-        if (getX(zeroIndex) >= size - 1) {
-            return null
-        }
-        val temp = value[zeroIndex]
-        val newVal = value.toMutableList()
-
-        newVal[zeroIndex] = newVal[zeroIndex + 1]
-        newVal[zeroIndex + 1] = temp
-        return Node(size, newVal, scorer, this, steps + 1)
+        return expandDir(1, this::getX)
     }
 
     fun getLength(): Int {
@@ -89,28 +66,32 @@ class Node(val size: Int, var value: List<Int>, var scorer: Scorer? = null, val 
         return length
     }
 
+    fun numWidth() = value.fold(0, {w, i -> if (i.toString().length > w) i.toString().length else w })
+
     fun toBoard(): String {
         var builder = StringBuilder()
 
+        var width = numWidth()
+
+        builder.append("[")
         for (i in value.indices) {
             if (i % size == 0 && i != 0)
-                builder.append("\n")
+                builder.append("]\n[")
             else if (i != 0)
                 builder.append(" ")
-            builder.append(value[i])
+            builder.append(Strings.padStart(value[i].toString(), width, ' '))
         }
-        return builder.toString()
+        return builder.append("]").toString()
     }
 
     fun printFamily() {
         if (parent == null) {
-            println(toBoard())
             return
         }
         parent.printFamily()
-        println(toBoard())
-        println(Strings.padStart("|", size, ' '))
-        println(Strings.padStart("V", size, ' '))
+        println(parent.toBoard())
+        println(Strings.padStart("|", ((numWidth() + 1) * size) / 2 + 1, ' '))
+        println(Strings.padStart("V", ((numWidth() + 1) * size) / 2 + 1, ' '))
     }
 
     override fun toString(): String {

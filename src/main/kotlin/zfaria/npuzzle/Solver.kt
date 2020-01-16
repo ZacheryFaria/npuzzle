@@ -31,7 +31,6 @@ fun solve(puzzle: Puzzle, scorer: Scorer) {
     end.printFamily()
     println(end.toBoard())
     println("Length of solution: ${end.steps}")
-    println("${end.getLength()}")
     println("Number of opened states: ${set.size - queue.size}")
     println("Number of states: ${set.size}")
     println("Time to solve: ${time}ms")
