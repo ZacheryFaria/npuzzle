@@ -2,7 +2,10 @@ package zfaria.npuzzle
 
 import com.google.common.base.Strings
 import com.google.common.hash.Hashing
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.nio.charset.Charset
+import kotlin.coroutines.*
 
 class Node(val size: Int, var value: List<Int>, var scorer: Scorer? = null, val parent: Node? = null, var steps: Int = 0) {
 
@@ -13,6 +16,8 @@ class Node(val size: Int, var value: List<Int>, var scorer: Scorer? = null, val 
 
     var score: Int = scorer?.invoke(this) ?: 0
 
+    val hash = hashFunction.hashString(value.toString(), Charset.defaultCharset()).asInt()
+
     fun getX(n: Int): Int {
         return n % size
     }
@@ -22,7 +27,7 @@ class Node(val size: Int, var value: List<Int>, var scorer: Scorer? = null, val 
     }
 
     fun expand(): List<Node> {
-        return listOf(expandDown(), expandUp(), expandLeft(), expandRight()).filterNotNull()
+        return listOfNotNull(expandDown(), expandUp(), expandLeft(), expandRight())
     }
 
     fun expandDir(delta: Int, index: (Int) -> Int): Node? {
@@ -105,6 +110,6 @@ class Node(val size: Int, var value: List<Int>, var scorer: Scorer? = null, val 
     }
 
     override fun hashCode(): Int {
-        return hashFunction.hashString(value.toString(), Charset.defaultCharset()).asInt()
+        return hash
     }
 }

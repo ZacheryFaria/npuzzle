@@ -11,7 +11,7 @@ fun main(args: Array<String>) {
 
     var puzzle = getPuzzle(args[0]) ?: return
 
-    val scorer = Scorer.GreedyScorer(Manhattan(puzzle.size))
+    val scorer = Scorer.AStarScorer(Manhattan(puzzle.size))
 
     solve(puzzle, scorer)
 }

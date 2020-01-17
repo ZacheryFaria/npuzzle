@@ -7,8 +7,7 @@ abstract class Heuristic(private var puzzleSize: Int) {
     var ideal: Node
 
     init {
-        var values = (0 until (puzzleSize * puzzleSize)).toMutableList()
-        values.removeAt(0)
+        var values = (1 until (puzzleSize * puzzleSize)).toMutableList()
         values.add(0)
         ideal = Node(puzzleSize, values)
     }
