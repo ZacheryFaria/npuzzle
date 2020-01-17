@@ -1,6 +1,5 @@
 package zfaria.npuzzle
 
-import zfaria.npuzzle.heuristics.Atomic
 import zfaria.npuzzle.heuristics.Manhattan
 
 fun main(args: Array<String>) {

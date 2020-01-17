@@ -2,10 +2,7 @@ package zfaria.npuzzle
 
 import com.google.common.base.Strings
 import com.google.common.hash.Hashing
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import java.nio.charset.Charset
-import kotlin.coroutines.*
 
 class Node(val size: Int, var value: List<Int>, var scorer: Scorer? = null, val parent: Node? = null, var steps: Int = 0) {
 
