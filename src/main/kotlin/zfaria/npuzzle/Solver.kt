@@ -32,6 +32,7 @@ fun solve(puzzle: Puzzle, scorer: Scorer) {
         println("Not solveable!")
         return
     }
+    
     end.printFamily()
     println(end.toBoard())
     println("Length of solution: ${end.steps}")

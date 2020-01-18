@@ -27,6 +27,9 @@ fun getPuzzle(path: String, goal: String? = null): Puzzle? {
         if (endPuzz == null) {
             println("Goal puzzle is invalid.")
             return null
+        } else if (endPuzz.size != puzz.size) {
+            println("Goal puzzle is of different length!")
+            return null
         }
     }
 
