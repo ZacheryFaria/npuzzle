@@ -11,7 +11,7 @@ import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
 fun main(args: Array<String>) {
-    var parser = ArgumentParsers.newFor("Npuzzle").build().defaultHelp(true)
+    val parser = ArgumentParsers.newFor("Npuzzle").build().defaultHelp(true)
 
     parser.addArgument("File Name").required(true)
     parser.addArgument("--heuristic", "-H").choices("Manhattan", "Atomic", "RowCol").help("The heuristic function to use.")
@@ -22,7 +22,7 @@ fun main(args: Array<String>) {
             .setDefault("Astar")
     parser.addArgument("--goal", "-g").help("A custom set goal file.").required(false)
 
-    var ns: Namespace? = try {
+    val ns: Namespace? = try {
         parser.parseArgs(args)
     } catch (e: ArgumentParserException) {
         parser.handleError(e)
@@ -54,12 +54,6 @@ fun main(args: Array<String>) {
             "Breadth" -> Scorer.LinearScorer()
             else -> Scorer.AStarScorer(heuristic)
         }
-    }
-
-    val goal: String? = ns["goal"]
-    if (goal == null && !canSolvePuzzle(puzzle)) {
-        println("Puzzle is unsolveable!")
-        return
     }
 
     solve(puzzle, scorer)

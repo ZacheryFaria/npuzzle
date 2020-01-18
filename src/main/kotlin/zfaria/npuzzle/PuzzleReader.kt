@@ -88,17 +88,3 @@ private fun trimComment(str: String): String {
         return str.substring(0, str.indexOf("#"))
     return str
 }
-
-/**
- * Uses a displacement count to determine if the puzzle can be solved.
- * Doesn't work with custom goals.
- */
-fun canSolvePuzzle(puzzle: Puzzle): Boolean {
-
-
-    return true
-}
-
-private fun countDisplacement(puzzle: Puzzle): Int {
-    return 0
-}
