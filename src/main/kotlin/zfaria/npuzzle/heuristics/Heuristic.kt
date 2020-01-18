@@ -18,9 +18,4 @@ abstract class Heuristic(private var puzzleSize: Int) {
      * Score should include current.steps
      */
     abstract fun score(current: Node): Int
-
-    fun getX(n: Int): Int = n % puzzleSize
-
-    fun getY(n: Int): Int = n / puzzleSize
-
 }

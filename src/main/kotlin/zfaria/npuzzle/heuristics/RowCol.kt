@@ -1,10 +1,8 @@
 package zfaria.npuzzle.heuristics
 
 import zfaria.npuzzle.Node
-import kotlin.math.abs
 
-class Manhattan(var puzzleSize: Int): Heuristic(puzzleSize) {
-
+class RowCol(var puzzleSize: Int): Heuristic(puzzleSize) {
     override fun score(current: Node): Int {
         var score = 0
         for (i in current.value.indices) {
@@ -18,7 +16,11 @@ class Manhattan(var puzzleSize: Int): Heuristic(puzzleSize) {
                 val actualX = i % puzzleSize
                 val actualY = i / puzzleSize
 
-                score += abs(goalX - actualX) + abs(goalY - actualY)
+                if (goalX != actualX)
+                    score++
+
+                if (goalY != actualY)
+                    score++
             }
         }
         return score

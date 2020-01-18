@@ -1,11 +1,39 @@
 package zfaria.npuzzle
 
+import com.google.common.math.IntMath.sqrt
 import java.io.File
+import java.math.RoundingMode
 import java.util.*
 
 data class Puzzle(val size: Int, val start: Node, val end: Node)
 
-fun getPuzzle(path: String): Puzzle? {
+fun getPuzzle(path: String, goal: String? = null): Puzzle? {
+    val puzz = readPuzzle(path)
+
+    if (puzz == null) {
+        println("Puzzle is invalid")
+        return null
+    }
+
+    val size = sqrt(puzz.size, RoundingMode.DOWN)
+
+    var endPuzz: MutableList<Int?>?
+
+    if (goal == null) {
+        endPuzz = (1 until (size * size)).toMutableList()
+        endPuzz.add(0)
+    } else {
+        endPuzz = readPuzzle(goal)
+        if (endPuzz == null) {
+            println("Goal puzzle is invalid.")
+            return null
+        }
+    }
+
+    return Puzzle(size, Node(size, puzz.filterNotNull()), Node(size, endPuzz.filterNotNull()))
+}
+
+fun readPuzzle(path: String): MutableList<Int?>? {
     val file = File(path)
 
     if (!file.exists()) {
@@ -26,23 +54,6 @@ fun getPuzzle(path: String): Puzzle? {
         println("Bad size value")
         return null
     }
-
-    val puzz = readPuzzle(scanner)
-
-    if (puzz == null) {
-        println("Puzzle is invalid")
-        return null
-    }
-
-    var endPuzz = puzz.sortedBy { i -> i }.toMutableList()
-
-    endPuzz.removeAt(0)
-    endPuzz.add(0)
-
-    return Puzzle(size, Node(size, puzz.filterNotNull()), Node(size, endPuzz.filterNotNull()))
-}
-
-fun readPuzzle(scanner: Scanner): MutableList<Int?>? {
     var arr: MutableList<Int?>? = mutableListOf()
 
     while (scanner.hasNext()) {
@@ -73,4 +84,18 @@ private fun trimComment(str: String): String {
     if (str.contains("#"))
         return str.substring(0, str.indexOf("#"))
     return str
+}
+
+/**
+ * Uses a displacement count to determine if the puzzle can be solved.
+ * Doesn't work with custom goals.
+ */
+fun canSolvePuzzle(puzzle: Puzzle): Boolean {
+
+
+    return true
+}
+
+private fun countDisplacement(puzzle: Puzzle): Int {
+    return 0
 }

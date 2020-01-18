@@ -4,7 +4,7 @@ import com.google.common.base.Strings
 import com.google.common.hash.Hashing
 import java.nio.charset.Charset
 
-class Node(val size: Int, var value: List<Int>, var scorer: Scorer? = null, val parent: Node? = null, var steps: Int = 0) {
+class Node(private val size: Int, var value: List<Int>, var scorer: Scorer? = null, private val parent: Node? = null, var steps: Int = 0) {
 
     @Suppress("UnstableApiUsage")
     private val hashFunction = Hashing.farmHashFingerprint64()
@@ -13,7 +13,7 @@ class Node(val size: Int, var value: List<Int>, var scorer: Scorer? = null, val 
 
     var score: Int = scorer?.invoke(this) ?: 0
 
-    val hash = hashFunction.hashString(value.toString(), Charset.defaultCharset()).asInt()
+    private val hash = hashFunction.hashString(value.toString(), Charset.defaultCharset()).asInt()
 
     fun getX(n: Int): Int {
         return n % size
@@ -57,23 +57,12 @@ class Node(val size: Int, var value: List<Int>, var scorer: Scorer? = null, val 
         return expandDir(1, this::getX)
     }
 
-    fun getLength(): Int {
-        var node = this
-        var length = 0
-
-        while (node.parent != null) {
-            length++
-            node = node.parent!!
-        }
-        return length
-    }
-
-    fun numWidth() = value.fold(0, {w, i -> if (i.toString().length > w) i.toString().length else w })
+    private fun numWidth() = value.fold(0, { w, i -> if (i.toString().length > w) i.toString().length else w })
 
     fun toBoard(): String {
-        var builder = StringBuilder()
+        val builder = StringBuilder()
 
-        var width = numWidth()
+        val width = numWidth()
 
         builder.append("[")
         for (i in value.indices) {
