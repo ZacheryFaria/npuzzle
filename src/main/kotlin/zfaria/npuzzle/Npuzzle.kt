@@ -8,7 +8,9 @@ import zfaria.npuzzle.heuristics.Atomic
 import zfaria.npuzzle.heuristics.Heuristic
 import zfaria.npuzzle.heuristics.Manhattan
 import zfaria.npuzzle.heuristics.RowCol
+import kotlin.time.ExperimentalTime
 
+@ExperimentalTime
 fun main(args: Array<String>) {
     var parser = ArgumentParsers.newFor("Npuzzle").build().defaultHelp(true)
 
